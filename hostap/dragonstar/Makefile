@@ -83,6 +83,11 @@ OBJS += ../src/crypto/crypto_$(CONFIG_CRYPTO).o
 LIBS += -lcrypto
 endif
 
+ifeq ($(CONFIG_CRYPTO), wolfssl)
+OBJS += ../src/crypto/crypto_wolfssl.o
+LIBS += -lwolfssl
+endif
+
 ifeq ($(CONFIG_CRYPTO), openssl_noasm)
 OBJS += ../src/crypto/crypto_openssl.o
 
@@ -125,7 +130,9 @@ endif
 ifdef NEED_SHA1
 ifneq ($(CONFIG_CRYPTO), openssl)
 ifneq ($(CONFIG_CRYPTO), openssl_noasm)
+ifneq ($(CONFIG_CRYPTO), wolfssl)
 SHA1OBJS += ../src/crypto/sha1.o
+endif
 endif
 endif
 SHA1OBJS += ../src/crypto/sha1-prf.o

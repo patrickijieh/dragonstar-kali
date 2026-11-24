@@ -2,7 +2,7 @@ FROM kalilinux/kali-rolling
 
 RUN apt update && \
 	DEBIAN_FRONTEND="noninteractive" \
-	apt install -y clang make vim python3 python3-pip python3-matplotlib python3-numpy libssl-dev sudo wget linux-perf
+	apt install -y clang make vim python3 python3-pip python3-matplotlib python3-numpy git libssl-dev sudo wget linux-perf automake autoconf libtool
 	#apt install -y kali-linux-headless
 
 # Build a NOASM Openssl for perf benchmarks
@@ -12,6 +12,15 @@ RUN wget -O - -nv "https://www.openssl.org/source/openssl-1.1.1n.tar.gz" 2>/dev/
 WORKDIR /tmp/openssl-1.1.1n
 RUN ./config --prefix=/opt/local_install no-ssl2 no-tests -g3 -ggdb -gdwarf-4 no-asm 2>&1 >/dev/null
 RUN make --quiet -j 2>/dev/null && make --quiet -j install_sw 2>&1 >/dev/null
+
+# Build wolfSSL for benchmarks
+WORKDIR /tmp
+RUN git clone https://github.com/wolfSSL/wolfssl.git
+
+WORKDIR /tmp/wolfssl
+RUN ./autogen.sh
+RUN ./configure --enable-wpas
+RUN make --quiet && make --quiet -j install
 
 # Create a user with access to sudo to avoid ACL conflicts in shared_folder
 ARG user=poc_user
@@ -39,6 +48,8 @@ RUN ln -sf /home/${user}/PoC/haclstar/kremlin/include/kremlin /home/${user}/PoC/
 WORKDIR /home/${user}/PoC/hostap/dragonstar
 RUN make CONFIG_CRYPTO=hacl clean && make -j CONFIG_CRYPTO=hacl
 RUN make CONFIG_CRYPTO=hacl CONFIG_PERF=y clean && make -j CONFIG_CRYPTO=hacl CONFIG_PERF=y
+#RUN make CONFIG_CRYPTO=wolfssl clean && make -j CONFIG_CRYPTO=wolfssl
+#RUN make CONFIG_CRYPTO=wolfssl CONFIG_PERF=y clean && make -j CONFIG_CRYPTO=wolfssl CONFIG_PERF=y
 RUN make CONFIG_CRYPTO=openssl clean && make -j CONFIG_CRYPTO=openssl
 RUN make CONFIG_CRYPTO=openssl CONFIG_PERF=y clean && make -j CONFIG_CRYPTO=openssl CONFIG_PERF=y
 RUN make CONFIG_CRYPTO=openssl_noasm clean && make -j CONFIG_CRYPTO=openssl_noasm
