@@ -11,9 +11,9 @@ i=0
 for p in $passwords; do
     ((i++))
     printf "\r\t\033[KTest $i/$n_passwords ($p)"
-    sudo perf stat -r $n_tests --cpu=1 -- nice -n -20 taskset -c 1 ./hostap/dragonstar/perf/dragonstar_openssl $p 2>>$LOG_DIR/legacy-openssl.perf
-    sudo perf stat -r $n_tests --cpu=1 -- nice -n -20 taskset -c 1 ./hostap/dragonstar/perf/dragonstar_openssl_noasm $p 2>>$LOG_DIR/legacy-openssl_noasm.perf
-    sudo perf stat -r $n_tests --cpu=1 -- nice -n -20 taskset -c 1 ./hostap/dragonstar/perf/dragonstar_hacl $p 2>>$LOG_DIR/legacy-hacl.perf
+    sudo perf stat -r $n_tests --cpu=8 -- nice -n -20 taskset -c 8 ./hostap/dragonstar/perf/dragonstar_openssl $p 2>>$LOG_DIR/legacy-openssl.perf
+    sudo perf stat -r $n_tests --cpu=8 -- nice -n -20 taskset -c 8 ./hostap/dragonstar/perf/dragonstar_openssl_noasm $p 2>>$LOG_DIR/legacy-openssl_noasm.perf
+    sudo perf stat -r $n_tests --cpu=8 -- nice -n -20 taskset -c 8 ./hostap/dragonstar/perf/dragonstar_hacl $p 2>>$LOG_DIR/legacy-hacl.perf
 done
 echo -e "\n"
 echo -e "\nTesting SAE-PT"
@@ -21,9 +21,9 @@ i=0
 for p in $passwords; do
     ((i++))
     printf "\r\t\033[KTest $i/$n_passwords ($p)"
-    sudo perf stat -r $n_tests --cpu=1 -- nice -n -20 taskset -c 1 ./hostap/dragonstar/perf/dragonstar_openssl -i testid $p 2>>$LOG_DIR/sswu-openssl.perf
-    sudo perf stat -r $n_tests --cpu=1 -- nice -n -20 taskset -c 1 ./hostap/dragonstar/perf/dragonstar_openssl_noasm -i testid $p 2>>$LOG_DIR/sswu-openssl_noasm.perf
-    sudo perf stat -r $n_tests --cpu=1 -- nice -n -20 taskset -c 1 ./hostap/dragonstar/perf/dragonstar_hacl -i testid $p 2>>$LOG_DIR/sswu-hacl.perf
+    sudo perf stat -r $n_tests --cpu=8 -- nice -n -20 taskset -c 8 ./hostap/dragonstar/perf/dragonstar_openssl -i testid $p 2>>$LOG_DIR/sswu-openssl.perf
+    sudo perf stat -r $n_tests --cpu=8 -- nice -n -20 taskset -c 8 ./hostap/dragonstar/perf/dragonstar_openssl_noasm -i testid $p 2>>$LOG_DIR/sswu-openssl_noasm.perf
+    sudo perf stat -r $n_tests --cpu=8 -- nice -n -20 taskset -c 8 ./hostap/dragonstar/perf/dragonstar_hacl -i testid $p 2>>$LOG_DIR/sswu-hacl.perf
 done
 echo -e "\n"
 
