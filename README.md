@@ -1,3 +1,6 @@
+## DISCLAIMER: THIS IS NOT MY PAPER, THE ORIGINAL PAPER IS WRITTEN BY BRAGA ET AL [(link)](https://ieeexplore.ieee.org/abstract/document/10190549)
+## ORIGINAL GITHUB: [(link)](https://github.com/ddealmei/dragonstar)
+
 # Dragonstar: A plugin verified cryptographic implementation for Dragonfly
 
 The PAKE Dragonfly is used as SAE(-PT) in WPA3 authentication.
