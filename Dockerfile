@@ -3,7 +3,6 @@ FROM kalilinux/kali-rolling
 RUN apt update && \
 	DEBIAN_FRONTEND="noninteractive" \
 	apt install -y clang make vim python3 python3-pip python3-matplotlib python3-numpy git libssl-dev sudo wget linux-perf automake autoconf libtool
-	#apt install -y kali-linux-headless
 
 # Build a NOASM Openssl for perf benchmarks
 WORKDIR /tmp
@@ -13,7 +12,7 @@ WORKDIR /tmp/openssl-1.1.1n
 RUN ./config --prefix=/opt/local_install no-ssl2 no-tests -g3 -ggdb -gdwarf-4 no-asm 2>&1 >/dev/null
 RUN make --quiet -j 2>/dev/null && make --quiet -j install_sw 2>&1 >/dev/null
 
-# Build wolfSSL for benchmarks
+# Build wolfSSL for perf benchmarks
 WORKDIR /tmp
 RUN git clone https://github.com/wolfSSL/wolfssl.git
 
