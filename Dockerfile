@@ -18,9 +18,9 @@ WORKDIR /tmp
 RUN git clone https://github.com/wolfSSL/wolfssl.git
 
 WORKDIR /tmp/wolfssl
-RUN ./autogen.sh
-RUN ./configure --enable-wpas
-RUN make --quiet && make --quiet -j install
+RUN ./autogen.sh 1>/dev/null
+RUN ./configure --enable-wpas 1>/dev/null
+RUN make --quiet && make --quiet -j install 1>/dev/null
 
 # Create a user with access to sudo to avoid ACL conflicts in shared_folder
 ARG user=poc_user
@@ -48,8 +48,8 @@ RUN ln -sf /home/${user}/PoC/haclstar/kremlin/include/kremlin /home/${user}/PoC/
 WORKDIR /home/${user}/PoC/hostap/dragonstar
 RUN make CONFIG_CRYPTO=hacl clean && make -j CONFIG_CRYPTO=hacl
 RUN make CONFIG_CRYPTO=hacl CONFIG_PERF=y clean && make -j CONFIG_CRYPTO=hacl CONFIG_PERF=y
-#RUN make CONFIG_CRYPTO=wolfssl clean && make -j CONFIG_CRYPTO=wolfssl
-#RUN make CONFIG_CRYPTO=wolfssl CONFIG_PERF=y clean && make -j CONFIG_CRYPTO=wolfssl CONFIG_PERF=y
+RUN make CONFIG_CRYPTO=wolfssl clean && make -j CONFIG_CRYPTO=wolfssl
+RUN make CONFIG_CRYPTO=wolfssl CONFIG_PERF=y clean && make -j CONFIG_CRYPTO=wolfssl CONFIG_PERF=y
 RUN make CONFIG_CRYPTO=openssl clean && make -j CONFIG_CRYPTO=openssl
 RUN make CONFIG_CRYPTO=openssl CONFIG_PERF=y clean && make -j CONFIG_CRYPTO=openssl CONFIG_PERF=y
 RUN make CONFIG_CRYPTO=openssl_noasm clean && make -j CONFIG_CRYPTO=openssl_noasm
